@@ -12,6 +12,10 @@ class SocialMediaPersona(CyberPersona):
     def __init__(self, username, ocean_traits=None):
         super().__init__(username, "Social Media")
 
+        self.identity.update({
+            "username": username
+        })
+
         self.network = {
             "followers": [],
             "following": []
