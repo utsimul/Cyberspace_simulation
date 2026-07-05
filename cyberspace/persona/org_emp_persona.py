@@ -1,4 +1,4 @@
-from cyberspace.persona.cyber_persona import CyberPersona
+from persona.cyber_persona import CyberPersona
 from datetime import datetime
 import random
 
@@ -8,7 +8,7 @@ class EmployeePersona(CyberPersona):
     Organizational employee cyber persona.
     """
 
-    def __init__(self, employee_id):
+    def __init__(self, employee_id, personality=None):
         super().__init__(employee_id, "employee")
 
         self.identity["employeeID"] = employee_id
@@ -20,13 +20,7 @@ class EmployeePersona(CyberPersona):
         }
 
         self.behavioral = {
-            "personality": {
-                "openness": random.uniform(0, 1),
-                "conscientiousness": random.uniform(0, 1),
-                "extraversion": random.uniform(0, 1),
-                "agreeableness": random.uniform(0, 1),
-                "neuroticism": random.uniform(0, 1)
-            }
+            "personality": personality
         }
 
         self.activity_history = []

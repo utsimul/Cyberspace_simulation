@@ -4,7 +4,7 @@
 #i can use existing data (im inclining towards this but we'll see)
 
 import random
-from cyberspace.persona.cyber_persona import CyberPersona
+from persona.cyber_persona import CyberPersona
 
 
 class SocialMediaPersona(CyberPersona):

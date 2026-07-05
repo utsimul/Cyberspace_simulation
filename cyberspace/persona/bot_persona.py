@@ -1,4 +1,4 @@
-from cyber_persona import CyberPersona
+from persona.cyber_persona import CyberPersona
 
 
 class Bot(CyberPersona):

@@ -1,4 +1,4 @@
-from cyberspace.persona.cyber_persona import CyberPersona
+from persona.cyber_persona import CyberPersona
 import random
 
 

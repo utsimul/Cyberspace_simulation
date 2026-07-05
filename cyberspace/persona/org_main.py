@@ -1,9 +1,9 @@
 import random
 
-from cyber_persona import CyberPersona
+from persona.cyber_persona import CyberPersona
 
 
-class OrganizationalConsumer(CyberPersona):
+class OrgMain(CyberPersona):
     """
     Represents a consumer account on an organization's platform
     (e.g., Amazon, eBay, banking, streaming service, etc.).

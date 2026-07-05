@@ -1,4 +1,4 @@
-from cyberspace.space.cyberspace_entity import CyberspaceEntity
+from space.cyberspace_entity import CyberspaceEntity
 
 class Db_and_credentials(CyberspaceEntity):
     """
