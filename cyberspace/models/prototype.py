@@ -12,6 +12,7 @@ from space.social_media_group import SocialMediaGroup
 
 from helpers.persona_generator import *
 from helpers.entity_generator import *
+from helpers.make_networks import *
 
 import random
 
@@ -124,4 +125,34 @@ for user in darkweb_users:
 print("added personas to entities")
 for group in social_groups:
     print(f"Group: {group.identity['group_name']}, Admin: {group.connections['admin'].identity['username']}, Members: {[member.identity['username'] for member in group.connections['members']]}, Mods: {[mod.identity['username'] for mod in group.connections['mods']]}")
+
+
+# MAKING CONNECTIONS AMONG PERSONAS ---------------------------------------------------------------
+
+
+# Social media follower/following network
+connect_social_users(personas["social_users"])
+
+# Dark web forum owners (forums owned, vendors, moderators)
+connect_forum_owners(
+    personas["forum_owners"],
+    entities["forums"]
+)
+
+# Dark web account owners (forums joined, vendors, buyers)
+connect_darkweb_users(
+    personas["darkweb_users"],
+    entities["forums"]
+)
+
+# Organizational hierarchy (bosses, peers, subordinates)
+connect_employees(personas["employees"])
+
+print("created persona networks")
+
+print("Social Media Users:")
+# for user in personas["social_users"]:
+#     print(f"User: {user.identity['username']}, Followers: {[follower.identity['username'] for follower in user.network['followers']]}, Following: {[following.identity['username'] for following in user.network['following']]}")
+
+#CALLING THE DO FUNCTIONS OF ALL INSTANCES --------------------------------------------------------------------------------
 
