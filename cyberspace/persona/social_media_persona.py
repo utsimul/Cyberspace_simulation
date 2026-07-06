@@ -9,8 +9,8 @@ from persona.cyber_persona import CyberPersona
 
 class SocialMediaPersona(CyberPersona):
 
-    def __init__(self, username, ocean_traits=None):
-        super().__init__(username, "Social Media")
+    def __init__(self, model,username, ocean_traits=None):
+        super().__init__(model,username, "Social Media")
 
         self.identity.update({
             "username": username
@@ -69,7 +69,7 @@ class SocialMediaPersona(CyberPersona):
 
         self.posts.append(post)
 
-    def do(self):
+    def step(self):
 
         if self.should_post():
             self.create_post()

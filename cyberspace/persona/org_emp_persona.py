@@ -8,8 +8,8 @@ class EmployeePersona(CyberPersona):
     Organizational employee cyber persona.
     """
 
-    def __init__(self, employee_id, personality=None):
-        super().__init__(employee_id, "employee")
+    def __init__(self, model,employee_id, personality=None):
+        super().__init__(model,employee_id, "employee")
 
         self.identity["employeeID"] = employee_id
 
@@ -67,7 +67,7 @@ class EmployeePersona(CyberPersona):
 
         self.log_activity("logout")
 
-    def do(self):
+    def step(self):
         """
         One simulation step.
         This is only an example and should later be replaced

@@ -11,12 +11,13 @@ class OrganizationalConsumer(CyberPersona):
 
     def __init__(
         self,
+        model,
         identifier,
         transaction_probability=0.1,
         interests=None,
         usage_behavior_probabilities=None,
     ):
-        super().__init__(identifier, "Organizational Consumer")
+        super().__init__(model,identifier, "Organizational Consumer")
 
 
         self.identity.update({
@@ -49,7 +50,7 @@ class OrganizationalConsumer(CyberPersona):
             "usage_history": [],
         }
 
-    def do(self):
+    def step(self):
         """
         Execute one simulation step.
 
@@ -57,7 +58,7 @@ class OrganizationalConsumer(CyberPersona):
         More sophisticated behavior can be added later.
         """
 
-        if random.random() < self.behavioral["transaction_probability"]:
+        if random.random() < self.behavioral["transaction_probability"][0]:
             self.activity_data["transaction_history"].append(
                 {
                     "event": "transaction"

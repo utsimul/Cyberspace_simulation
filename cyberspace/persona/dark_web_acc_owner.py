@@ -9,6 +9,7 @@ class DarkWebAccountOwner(CyberPersona):
 
     def __init__(
         self,
+        model,
         identifier,
         username,
         browsing_frequency="medium",
@@ -16,7 +17,7 @@ class DarkWebAccountOwner(CyberPersona):
         risk_tolerance="medium",
         ocean_traits=None,
     ):
-        super().__init__(identifier, "dark_web_account_owner")
+        super().__init__(model,identifier, "dark_web_account_owner")
 
         self.identity.update({
             "username": username
@@ -85,7 +86,7 @@ class DarkWebAccountOwner(CyberPersona):
             self.network["trusted_buyers"].append(buyer)
 
 
-    def do(self):
+    def step(self):
         """
         Perform one simulation step.
 

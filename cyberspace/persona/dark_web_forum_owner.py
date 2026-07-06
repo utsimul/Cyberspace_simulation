@@ -10,6 +10,7 @@ class DarkWebForumOwner(CyberPersona):
 
     def __init__(
         self,
+        model,
         identifier,
         owner_alias,
         usernames=None,
@@ -19,7 +20,7 @@ class DarkWebForumOwner(CyberPersona):
         behavioral=None,
     ):
 
-        super().__init__(identifier, "Dark Web Forum Owner")
+        super().__init__(model,identifier, "Dark Web Forum Owner")
 
         self.identity.update({
             "owner_alias": owner_alias,
@@ -106,7 +107,7 @@ class DarkWebForumOwner(CyberPersona):
 
     #at this point they are just recording events. but we need to ADD grass and make them modify grass (web forum)
 
-    def do(self):
+    def step(self):
         """
         Executes one simulation step.
         """

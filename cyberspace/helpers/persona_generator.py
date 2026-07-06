@@ -61,13 +61,14 @@ def sample_employee_ocean():
         "neuroticism": sample_trait(0.40,0.15)
     }
 
-def generate_social_media_personas(n):
+def generate_social_media_personas(model,n):
 
     users = []
 
     for i in range(n):
 
         user = SocialMediaPersona(
+            model,
             username=f"user_{i}",
             ocean_traits=sample_social_media_ocean()
         )
@@ -76,7 +77,7 @@ def generate_social_media_personas(n):
 
     return users
 
-def generate_darkweb_users(n):
+def generate_darkweb_users(model, n):
 
     users = []
 
@@ -87,6 +88,7 @@ def generate_darkweb_users(n):
     for i in range(n):
 
         user = DarkWebAccountOwner(
+            model,
             identifier=f"dw_{i}",
             username=f"dark_{i}",
             browsing_frequency=random.choices(
@@ -108,13 +110,14 @@ def generate_darkweb_users(n):
 
     return users
 
-def generate_employees(n):
+def generate_employees(model, n):
 
     employees = []
 
     for i in range(n):
 
         emp = EmployeePersona(
+            model,
             employee_id=f"EMP{i:03}",
             personality=sample_employee_ocean()
         )
@@ -123,7 +126,7 @@ def generate_employees(n):
 
     return employees
 
-def generate_bots(n): #bots dont require OCEAN so random choices.
+def generate_bots(model, n): #bots dont require OCEAN so random choices.
 
     bots = []
 
@@ -144,6 +147,7 @@ def generate_bots(n): #bots dont require OCEAN so random choices.
     for i in range(n):
 
         bot = Bot(
+            model,
             identifier=f"BOT{i:03}",
             bot_alias=f"bot_{i}",
             trigger_conditions=random.sample(triggers, k=2),
@@ -154,7 +158,7 @@ def generate_bots(n): #bots dont require OCEAN so random choices.
 
     return bots
 
-def generate_darkweb_forum_owners(n):
+def generate_darkweb_forum_owners(model, n):
     """
     Generate Dark Web Forum Owner personas.
     """
@@ -164,6 +168,7 @@ def generate_darkweb_forum_owners(n):
     for i in range(n):
 
         owner = DarkWebForumOwner(
+            model,
             identifier=f"DWFO{i:03}",
             owner_alias=f"admin_{i}",
             behavioral={
@@ -186,7 +191,7 @@ def generate_darkweb_forum_owners(n):
     return owners
 
 
-def generate_organizational_consumers(n):
+def generate_organizational_consumers(model, n):
     """
     Generate Organizational Consumer personas.
     """
@@ -224,14 +229,14 @@ def generate_organizational_consumers(n):
             "logout": probs[3]
         }
 
-        consumer = OrganizationalConsumer(identifier, transaction_probability, interests, usgae_behavior_probabilities)
+        consumer = OrganizationalConsumer(model,identifier, transaction_probability, interests, usgae_behavior_probabilities)
 
         consumers.append(consumer)
 
     return consumers
 
 
-def generate_org_main_accounts(n):
+def generate_org_main_accounts(model, n):
     """
     Generate official organization accounts.
     """
@@ -250,6 +255,7 @@ def generate_org_main_accounts(n):
     for i in range(n):
 
         account = OrgMain(
+            model,
             identifier=f"Company_{i}",
 
             interests=random.sample(

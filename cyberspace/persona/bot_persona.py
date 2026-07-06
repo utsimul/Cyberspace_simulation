@@ -9,13 +9,14 @@ class Bot(CyberPersona):
 
     def __init__(
         self,
+        model,
         identifier,
         bot_alias,
         trigger_conditions=None,
         action=None,
         activity_data=None,
     ):
-        super().__init__(identifier, "Bot")
+        super().__init__(model, identifier, "Bot")
 
 
         self.identity.update({
@@ -38,7 +39,7 @@ class Bot(CyberPersona):
         """
         self.activity_data.append(activity)
 
-    def do(self, event=None):
+    def step(self, event=None):
         """
         Executes the bot's action if one of its trigger conditions is met.
 

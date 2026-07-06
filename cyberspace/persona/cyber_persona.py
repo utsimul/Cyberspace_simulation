@@ -1,23 +1,34 @@
-from abc import ABC, abstractmethod
+from mesa import Agent
 
 
-class CyberPersona(ABC):
+class CyberPersona(Agent):
     """
     Base class for all cyber personas.
     """
 
-    def __init__(self, identifier, persona_type):
+    def __init__(self, model, identifier, persona_type):
+        """
+        Parameters
+        ----------
+        model : mesa.Model
+            The Mesa model this agent belongs to.
+        identifier : str
+            Unique identifier for the persona.
+        persona_type : str
+            Type/category of the persona.
+        """
+        super().__init__(model)
+
         self.identity = {
             "identifier": identifier,
             "type": persona_type
         }
 
-        #self.credentials = {}
-
         self.behavioral = {}
 
         self.network = {}
 
+        # self.credentials = {}
         # self.technical = {
         #     "platform": None,
         #     "creation_date": None,
@@ -26,10 +37,11 @@ class CyberPersona(ABC):
         #     "associated_domains": []
         # }
 
-    @abstractmethod
-    def do(self):
+    def step(self):
         """
-        Define the behavior of the cyber persona for one simulation step.
-        Must be implemented by all subclasses.
+        Called automatically once every simulation step.
+        Should be overridden by subclasses.
         """
-        pass
+        raise NotImplementedError(
+            f"{self.__class__.__name__} must implement the step() method."
+        )

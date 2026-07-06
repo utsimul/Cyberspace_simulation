@@ -11,10 +11,11 @@ class OrgMain(CyberPersona):
 
     def __init__(
         self,
+        model,
         identifier,
         interests=None,
     ):
-        super().__init__(identifier, "Organizational Consumer")
+        super().__init__(model,identifier, "Organizational Consumer")
 
 
         self.identity.update({
@@ -27,7 +28,7 @@ class OrgMain(CyberPersona):
 
 
 
-    def do(self):
+    def step(self):
         """
         Execute one simulation step.
 
