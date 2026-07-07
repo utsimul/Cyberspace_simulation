@@ -3,6 +3,7 @@ from mesa import Model
 from helpers.persona_generator import *
 from helpers.entity_generator import *
 from helpers.make_networks import *
+from helpers.attacker_generator import *
 
 import random
 
@@ -22,6 +23,15 @@ class CyberSimulation(Model):
         n_databases=5,
         n_person_details=20,
         n_org_accounts=5,
+
+        # Attackers
+        n_general_attackers=10,
+        n_financial_attackers=5,
+        n_iabs=3,
+        n_identity_thieves=5,
+        n_hacktivists=3,
+        n_law_enforcement=2,
+        n_nation_states=1,
     ):
         super().__init__()
 
@@ -40,6 +50,16 @@ class CyberSimulation(Model):
             "forums": [],
             "databases": [],
             "person_details": [],
+        }
+
+        self.attackers = {
+            "general": [],
+            "financial": [],
+            "iab": [],
+            "identity_thieves": [],
+            "hacktivists": [],
+            "law_enforcement": [],
+            "nation_state": [],
         }
 
         #GENERATING INSTANCES ---------------------------------------------------------------
@@ -75,6 +95,48 @@ class CyberSimulation(Model):
             )
         )
 
+        self.attackers["general"] = generate_attackers(
+            self,
+            n_general_attackers,
+            AttackerType.GENERAL_MALICIOUS,
+        )
+
+        self.attackers["financial"] = generate_attackers(
+            self,
+            n_financial_attackers,
+            AttackerType.FINANCIAL_CYBERCRIMINAL,
+        )
+
+        self.attackers["iab"] = generate_attackers(
+            self,
+            n_iabs,
+            AttackerType.INITIAL_ACCESS_BROKER,
+        )
+
+        self.attackers["identity_thieves"] = generate_attackers(
+            self,
+            n_identity_thieves,
+            AttackerType.IDENTITY_THIEF,
+        )
+
+        self.attackers["hacktivists"] = generate_attackers(
+            self,
+            n_hacktivists,
+            AttackerType.HACKTIVIST,
+        )
+
+        self.attackers["law_enforcement"] = generate_attackers(
+            self,
+            n_law_enforcement,
+            AttackerType.LAW_ENFORCEMENT,
+        )
+
+        self.attackers["nation_state"] = generate_attackers(
+            self,
+            n_nation_states,
+            AttackerType.NATION_STATE,
+        )
+
         self.entities["forums"] = generate_darkweb_forums(
             n_forums
         )
@@ -91,6 +153,8 @@ class CyberSimulation(Model):
         self.entities["social_groups"] = generate_social_media_groups(
             n_social_groups
         )
+
+
 
         print("Generated instances")
 
@@ -218,17 +282,21 @@ class CyberSimulation(Model):
         self.agents.shuffle_do("step")
 
 sim = CyberSimulation(
+
     n_social=50,
     n_employees=20,
     n_consumers=30,
     n_darkweb_users=15,
     n_forum_owners=5,
     n_bots=2,
-    n_social_groups=10,
-    n_forums=5,
-    n_databases=5,
-    n_person_details=20,
-    n_org_accounts=5,
+
+    n_general_attackers=20,
+    n_financial_attackers=8,
+    n_iabs=5,
+    n_identity_thieves=10,
+    n_hacktivists=3,
+    n_law_enforcement=2,
+    n_nation_states=1,
 )
 sim.add_agents()
 sim.assign_personas_to_entities()
