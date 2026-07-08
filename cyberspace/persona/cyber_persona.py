@@ -28,6 +28,28 @@ class CyberPersona(Agent):
 
         self.network = {}
 
+        self.security = {
+            "access_level": "none",      # none, user, admin
+            "compromised": False,
+            "persistence": False,
+            "discovered": False,
+            "c2": False,
+            "data_collected": False,
+            "honeypot": False,
+            "monitoring_enabled": False
+        }
+
+        self.assets = {
+            "credentials": True,
+            "private_messages": [],
+            }
+    
+        self.vulnerabilities = {
+            "phishing_susceptibility": 0.6,
+            "weak_password": False,
+            "mfa_enabled": True
+        }
+
         # self.credentials = {}
         # self.technical = {
         #     "platform": None,
@@ -36,6 +58,8 @@ class CyberPersona(Agent):
         #     "wallet_addresses": [],
         #     "associated_domains": []
         # }
+
+        
 
     def step(self):
         """

@@ -1,0 +1,231 @@
+{
+    "Get access": {
+        "recon": {
+
+            "effects" : [
+                {
+                    "param" : "discovered",
+                    "operation" : "set",
+                    "value" : "True"
+                }
+            ]
+            
+            
+        },
+        "initial_access" : {
+            "effects" : [
+                {
+                    "param" : "access_level",
+                    "operation" : "set",
+                    "value" : "user"
+                }
+            ]
+        },
+
+        "persistence" : {
+            "effects" : [
+                {
+                    "param" : "persistence",
+                    "operation" : "set",
+                    "value" : "True"
+                }
+            ]
+        },
+
+        "privilege_escalation" : {
+            "effects" : [
+                {
+                    "param" : "access_level",
+                    "operation" : "set",
+                    "value" : "admin"
+                }
+            ]
+        },
+        "collection" : {
+            "effects" : [
+                {
+                    "param" : "data_collected",
+                    "operation" : "set",
+                    "value" : "True"
+                },
+
+                {
+                    "param" : "attacker.stolen_data",
+                    "operation" : "append",
+                    "value" : "assets"
+                }
+            ]
+        },
+        "command_and_control" : {
+            "effects" : [
+                {
+                    "param" : "c2",
+                    "operation" : "set",
+                    "value" : "True"
+                }
+            ]
+        },
+        "methods" : {
+            
+        }
+    },
+
+    
+    "Get credentials": {
+        "recon": {
+            "effects": [
+                {
+                    "param": "discovered",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "initial_access": {
+            "effects": [
+                {
+                    "param": "access_level",
+                    "operation": "set",
+                    "value": "user"
+                }
+            ]
+        },
+
+        "credential_access": {
+            "effects": [
+                {
+                    "param": "credentials_compromised",
+                    "operation": "set",
+                    "value": true
+                },
+                {
+                    "param": "attacker.stolen_data",
+                    "operation": "append",
+                    "value": "credentials"
+                }
+            ]
+        },
+
+        "collection": {
+            "effects": [
+                {
+                    "param": "data_collected",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "command_and_control": {
+            "effects": [
+                {
+                    "param": "c2",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "methods": {
+
+        }
+    },
+
+    
+    "Turn platform into honeypot": {
+        "recon": {
+            "effects": [
+                {
+                    "param": "discovered",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "initial_access": {
+            "effects": [
+                {
+                    "param": "access_level",
+                    "operation": "set",
+                    "value": "admin"
+                }
+            ]
+        },
+
+        "persistence": {
+            "effects": [
+                {
+                    "param": "persistence",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "actions_on_objectives": {
+            "effects": [
+                {
+                    "param": "honeypot",
+                    "operation": "set",
+                    "value": true
+                },
+                {
+                    "param": "monitoring_enabled",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "methods": {
+
+        }
+    },
+
+    
+    "Collect data and observe": {
+        "recon": {
+            "effects": [
+                {
+                    "param": "discovered",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "discovery": {
+            "effects": [
+                {
+                    "param": "assets_discovered",
+                    "operation": "set",
+                    "value": true
+                }
+            ]
+        },
+
+        "collection": {
+            "effects": [
+                {
+                    "param": "data_collected",
+                    "operation": "set",
+                    "value": true
+                },
+                {
+                    "param": "attacker.stolen_data",
+                    "operation": "append",
+                    "value": "public_data"
+                }
+            ]
+        },
+
+        "methods": {
+
+        }
+    }
+
+
+
+}
