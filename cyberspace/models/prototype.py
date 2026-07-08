@@ -166,14 +166,18 @@ class CyberSimulation(Model):
 
         print("Simulation initialized.")
 
-    #ADD AGENTS TO MODEL --------------------------------------------------------------------------------
 
     def add_agents(self):
 
+        # personas
         for category in self.personas.values():
-
             for agent in category:
                 self.agents.add(agent)
+
+        # attackers
+        for category in self.attackers.values():
+            for attacker in category:
+                self.agents.add(attacker)
 
 
     def assign_personas_to_entities(self):

@@ -30,6 +30,26 @@ class SocialMediaPersona(CyberPersona):
             "neuroticism": 0.5
         }
 
+        self.security = {
+            "access_level": "none",      # none, user, admin
+            "compromised": False,
+            "persistence": False,
+            "discovered": False,
+            "c2": False,
+            "data_collected": False
+        }
+
+        self.assets = {
+            "credentials": True,
+            "private_messages": [],
+            }
+    
+        self.vulnerabilities = {
+            "phishing_susceptibility": 0.6,
+            "weak_password": False,
+            "mfa_enabled": True
+        }
+
         # Account history
         self.posts = []
 
@@ -46,6 +66,8 @@ class SocialMediaPersona(CyberPersona):
             "neutral",
             "negative"
         ]
+
+
 
     def should_post(self):
         """
