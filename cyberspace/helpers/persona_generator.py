@@ -70,7 +70,8 @@ def generate_social_media_personas(model,n):
         user = SocialMediaPersona(
             model,
             username=f"user_{i}",
-            ocean_traits=sample_social_media_ocean()
+            ocean_traits=sample_social_media_ocean(),
+            IR_capability=sample_social_media_ir()
         )
 
         users.append(user)
@@ -103,7 +104,8 @@ def generate_darkweb_users(model, n):
                 risk,
                 weights=[0.2,0.5,0.3]
             )[0],
-            ocean_traits=sample_darkweb_ocean()
+            ocean_traits=sample_darkweb_ocean(),
+            IR_capability=sample_darkweb_ir()
         )
 
         users.append(user)
@@ -119,7 +121,8 @@ def generate_employees(model, n):
         emp = EmployeePersona(
             model,
             employee_id=f"EMP{i:03}",
-            personality=sample_employee_ocean()
+            personality=sample_employee_ocean(),
+            IR_capability=sample_employee_ir()
         )
 
         employees.append(emp)
@@ -183,7 +186,8 @@ def generate_darkweb_forum_owners(model, n):
                     weights=[0.9, 0.1]
                 )[0],
                 "exit_scam_probability": np.random.uniform(0.0, 0.03)
-            }
+            },
+            IR_capability=sample_darkweb_ir()
         )
 
         owners.append(owner)
@@ -229,7 +233,9 @@ def generate_organizational_consumers(model, n):
             "logout": probs[3]
         }
 
-        consumer = OrganizationalConsumer(model,identifier, transaction_probability, interests, usgae_behavior_probabilities)
+        IR_capability = sample_consumer_ir()
+
+        consumer = OrganizationalConsumer(model,identifier, transaction_probability, interests, usgae_behavior_probabilities, IR_capability)
 
         consumers.append(consumer)
 
@@ -261,9 +267,108 @@ def generate_org_main_accounts(model, n):
             interests=random.sample(
                 company_types,
                 k=random.randint(1, 2)
-            )
+            ),
+            IR_capability=sample_org_account_ir()
         )
 
         accounts.append(account)
 
     return accounts
+
+
+def sample_ir_capability(
+    monitoring_mean=0.5,
+    detection_mean=0.5,
+    reporting_mean=0.5,
+    containment_mean=0.5,
+    recovery_mean=0.5,
+    knowledge_mean=0.5,
+    speed_mean=0.5,
+):
+    """
+    Sample Incident Response capability profile.
+    All values are between 0 and 1.
+    """
+
+    return {
+        "monitoring": sample_trait(monitoring_mean, 0.15),
+        "detection_skill": sample_trait(detection_mean, 0.15),
+        "reporting": sample_trait(reporting_mean, 0.15),
+        "containment": sample_trait(containment_mean, 0.15),
+        "recovery": sample_trait(recovery_mean, 0.15),
+        "security_knowledge": sample_trait(knowledge_mean, 0.15),
+        "response_speed": sample_trait(speed_mean, 0.15),
+    }
+
+def sample_social_media_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.40,
+        detection_mean=0.45,
+        reporting_mean=0.35,
+        containment_mean=0.35,
+        recovery_mean=0.40,
+        knowledge_mean=0.40,
+        speed_mean=0.45,
+    )
+
+def sample_employee_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.65,
+        detection_mean=0.65,
+        reporting_mean=0.80,
+        containment_mean=0.60,
+        recovery_mean=0.55,
+        knowledge_mean=0.70,
+        speed_mean=0.70,
+    )
+
+def sample_darkweb_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.70,
+        detection_mean=0.75,
+        reporting_mean=0.15,
+        containment_mean=0.75,
+        recovery_mean=0.70,
+        knowledge_mean=0.80,
+        speed_mean=0.75,
+    )
+
+def sample_forum_owner_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.85,
+        detection_mean=0.85,
+        reporting_mean=0.20,
+        containment_mean=0.90,
+        recovery_mean=0.80,
+        knowledge_mean=0.90,
+        speed_mean=0.85,
+    )
+
+def sample_consumer_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.45,
+        detection_mean=0.45,
+        reporting_mean=0.40,
+        containment_mean=0.40,
+        recovery_mean=0.45,
+        knowledge_mean=0.45,
+        speed_mean=0.45,
+    )
+
+def sample_org_account_ir():
+
+    return sample_ir_capability(
+        monitoring_mean=0.90,
+        detection_mean=0.85,
+        reporting_mean=0.90,
+        containment_mean=0.85,
+        recovery_mean=0.80,
+        knowledge_mean=0.85,
+        speed_mean=0.85,
+    )
+

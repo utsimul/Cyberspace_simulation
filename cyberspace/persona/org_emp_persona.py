@@ -8,7 +8,7 @@ class EmployeePersona(CyberPersona):
     Organizational employee cyber persona.
     """
 
-    def __init__(self, model,employee_id, personality=None):
+    def __init__(self, model,employee_id, personality=None, IR_capability = None):
         super().__init__(model,employee_id, "employee")
 
         self.identity["employeeID"] = employee_id
@@ -24,6 +24,8 @@ class EmployeePersona(CyberPersona):
         }
 
         self.activity_history = []
+
+        self.IR_capability = IR_capability
 
 
     def log_activity(self, action, target=None, details=None):
@@ -73,6 +75,8 @@ class EmployeePersona(CyberPersona):
         This is only an example and should later be replaced
         by an actual behavior model.
         """
+
+        self.incident_response_step()
 
         action = random.choice(["login", "logout"])
 

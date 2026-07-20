@@ -14,6 +14,7 @@ class OrgMain(CyberPersona):
         model,
         identifier,
         interests=None,
+        IR_capability = None
     ):
         super().__init__(model,identifier, "Organizational Consumer")
 
@@ -24,6 +25,7 @@ class OrgMain(CyberPersona):
 
 
         self.network = {}
+        self.IR_capability = IR_capability
 
 
 
@@ -35,5 +37,7 @@ class OrgMain(CyberPersona):
         This is intentionally kept simple for now.
         More sophisticated behavior can be added later.
         """
+
+        self.incident_response_step()
 
         pass

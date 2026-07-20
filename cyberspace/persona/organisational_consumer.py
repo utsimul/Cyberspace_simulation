@@ -16,6 +16,7 @@ class OrganizationalConsumer(CyberPersona):
         transaction_probability=0.1,
         interests=None,
         usage_behavior_probabilities=None,
+        IR_capability = None
     ):
         super().__init__(model,identifier, "Organizational Consumer")
 
@@ -50,6 +51,8 @@ class OrganizationalConsumer(CyberPersona):
             "usage_history": [],
         }
 
+        self.IR_capability = IR_capability
+
     def step(self):
         """
         Execute one simulation step.
@@ -57,6 +60,8 @@ class OrganizationalConsumer(CyberPersona):
         This is intentionally kept simple for now.
         More sophisticated behavior can be added later.
         """
+
+        self.incident_response_step()
 
         if random.random() < self.behavioral["transaction_probability"][0]:
             self.activity_data["transaction_history"].append(

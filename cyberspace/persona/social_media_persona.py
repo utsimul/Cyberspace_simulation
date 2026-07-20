@@ -9,7 +9,7 @@ from persona.cyber_persona import CyberPersona
 
 class SocialMediaPersona(CyberPersona):
 
-    def __init__(self, model,username, ocean_traits=None):
+    def __init__(self, model,username, ocean_traits=None, IR_capability = None):
         super().__init__(model,username, "Social Media")
 
         self.identity.update({
@@ -30,25 +30,6 @@ class SocialMediaPersona(CyberPersona):
             "neuroticism": 0.5
         }
 
-        self.security = {
-            "access_level": "none",      # none, user, admin
-            "compromised": False,
-            "persistence": False,
-            "discovered": False,
-            "c2": False,
-            "data_collected": False
-        }
-
-        self.assets = {
-            "credentials": True,
-            "private_messages": [],
-            }
-    
-        self.vulnerabilities = {
-            "phishing_susceptibility": 0.6,
-            "weak_password": False,
-            "mfa_enabled": True
-        }
 
         # Account history
         self.posts = []
@@ -67,6 +48,7 @@ class SocialMediaPersona(CyberPersona):
             "negative"
         ]
 
+        self.IR_capability = IR_capability
 
 
     def should_post(self):
@@ -92,6 +74,8 @@ class SocialMediaPersona(CyberPersona):
         self.posts.append(post)
 
     def step(self):
+
+        self.incident_response_step()
 
         if self.should_post():
             self.create_post()

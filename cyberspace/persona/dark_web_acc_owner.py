@@ -16,6 +16,7 @@ class DarkWebAccountOwner(CyberPersona):
         posting_frequency="low",
         risk_tolerance="medium",
         ocean_traits=None,
+        IR_capability = NotImplementedError
     ):
         super().__init__(model,identifier, "dark_web_account_owner")
 
@@ -58,6 +59,8 @@ class DarkWebAccountOwner(CyberPersona):
 
         self.activity_log = []
 
+        self.IR_capability = IR_capability 
+
     def log_activity(self, activity_type, details=None):
         """
         Record an activity performed by the persona.
@@ -97,6 +100,8 @@ class DarkWebAccountOwner(CyberPersona):
         #right now only random - this is just to get the code running.
         #will add OCEAN or actual data based logic later
 
+        self.incident_response_step()
+
         r = random.random()
 
         if r < 0.70:
@@ -107,3 +112,5 @@ class DarkWebAccountOwner(CyberPersona):
 
         else:
             self.log_activity("send_message")
+        
+        

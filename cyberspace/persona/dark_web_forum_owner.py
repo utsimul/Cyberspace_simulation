@@ -18,6 +18,7 @@ class DarkWebForumOwner(CyberPersona):
         moderators=None,
         forums_owned=None,
         behavioral=None,
+        IR_capability = None
     ):
 
         super().__init__(model,identifier, "Dark Web Forum Owner")
@@ -58,6 +59,8 @@ class DarkWebForumOwner(CyberPersona):
             self.behavioral.update(behavioral)
 
         self.activity_data = []
+
+        self.IR_capability = IR_capability 
 
     def log_activity(self, action, details=None):
         """
@@ -113,6 +116,8 @@ class DarkWebForumOwner(CyberPersona):
         """
 
         self.log_activity("Simulation Step Started")
+
+        self.incident_response_step()
 
         # Make a forum announcement
         if random.random() < self.behavioral["post_probability"]:
