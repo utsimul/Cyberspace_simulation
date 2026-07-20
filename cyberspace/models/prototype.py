@@ -4,8 +4,14 @@ from helpers.persona_generator import *
 from helpers.entity_generator import *
 from helpers.make_networks import *
 from helpers.attacker_generator import *
+from helpers.plotting import *
 
 import random
+
+from mesa.datacollection import DataCollector
+import pandas as pd
+import matplotlib.pyplot as plt
+from collections import Counter
 
 
 class CyberSimulation(Model):
@@ -164,8 +170,63 @@ class CyberSimulation(Model):
 
         self.add_agents()
 
-        print("Simulation initialized.")
+        self.datacollector = DataCollector(
+            model_reporters={
 
+                "Normal": lambda m: m.count_ir_stage("normal"),
+                "Detected": lambda m: m.count_ir_stage("detected"),
+                "Contained": lambda m: m.count_ir_stage("contained"),
+                "Eradicated": lambda m: m.count_ir_stage("eradicated"),
+                "Recovered": lambda m: m.count_ir_stage("recovered"),
+
+                "Compromised":
+                    lambda m: sum(p.security["compromised"] for p in m.get_all_personas()),
+
+                "Discovered":
+                    lambda m: sum(p.security["discovered"] for p in m.get_all_personas()),
+
+                "C2":
+                    lambda m: sum(p.security["c2"] for p in m.get_all_personas()),
+
+                "Persistence":
+                    lambda m: sum(p.security["persistence"] for p in m.get_all_personas()),
+
+                "DataCollected":
+                    lambda m: sum(p.security["data_collected"] for p in m.get_all_personas()),
+
+                "Monitoring":
+                    lambda m: sum(p.security["monitoring_enabled"] for p in m.get_all_personas()),
+            }
+        )
+
+        # collect initial state
+        self.datacollector.collect(self)
+
+        print("Simulation initialized.")
+    
+
+    def get_all_personas(self):
+        """Return every cyber persona (not attackers)."""
+        personas = []
+
+        for category in self.personas.values():
+            personas.extend(category)
+
+        return personas
+
+
+    def count_compromised(self):
+        return sum(
+            p.security["compromised"]
+            for p in self.get_all_personas()
+        )
+
+
+    def count_ir_stage(self, stage):
+        return sum(
+            p.ir_state == stage
+            for p in self.get_all_personas()
+        )
 
     def add_agents(self):
 
@@ -284,6 +345,7 @@ class CyberSimulation(Model):
     def step(self):
 
         self.agents.shuffle_do("step")
+        self.datacollector.collect(self)
 
 sim = CyberSimulation(
 
@@ -314,3 +376,8 @@ sim.make_networks()
 for i in range(10):
     print(f"Step {i}")
     sim.step()
+df = sim.datacollector.get_model_vars_dataframe()
+
+print(df.head())
+
+dashboard(df)
