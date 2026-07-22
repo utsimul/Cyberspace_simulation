@@ -1,4 +1,5 @@
 from mesa import Agent
+import random
 
 
 class CyberPersona(Agent):
@@ -60,6 +61,16 @@ class CyberPersona(Agent):
             "incidents_handled": 0
         }
 
+        self.ir_capability = {
+            "detection_skill": random.uniform(0.3, 0.9),
+            "monitoring": random.uniform(0.3, 0.9),
+            "response_speed": random.uniform(0.3, 0.9),
+            "containment_skill": random.uniform(0.3, 0.9),
+            "eradication_skill": random.uniform(0.3, 0.9),
+            "recovery_skill": random.uniform(0.3, 0.9),
+            "learning_skill": random.uniform(0.3, 0.9),
+        }
+
         
 
         # self.credentials = {}
@@ -114,6 +125,7 @@ class CyberPersona(Agent):
     
     def identify_incident(self):
 
+
         if not self.security["compromised"]:
             return False
 
@@ -129,11 +141,14 @@ class CyberPersona(Agent):
         if success:
 
             self.security["discovered"] = True
-            self.ir_state = "identification"
+            self.ir_state = "detected"
+            print("state changed to detected")
 
         return success
     
     def contain_incident(self):
+
+        print("contain incident called")
 
         if not self.security["discovered"]:
             return False
@@ -147,7 +162,7 @@ class CyberPersona(Agent):
         if success:
 
             self.security["c2"] = False
-            self.ir_state = "containment"
+            self.ir_state = "contained"
 
         return success
     
@@ -166,13 +181,13 @@ class CyberPersona(Agent):
             self.security["compromised"] = False
             self.security["persistence"] = False
 
-            self.ir_state = "eradication"
+            self.ir_state = "eradicated"
 
         return success
     
     def recover_system(self):
 
-        if self.ir_state != "eradication":
+        if self.ir_state != "eradicated":
             return False
 
         success = self.ir_attempt({
@@ -184,13 +199,13 @@ class CyberPersona(Agent):
 
             self.security["access_level"] = "user"
 
-            self.ir_state = "recovery"
+            self.ir_state = "recovered"
 
         return success
     
     def learn_from_incident(self):
 
-        if self.ir_state != "recovery":
+        if self.ir_state != "recovered":
             return False
 
         success = self.ir_attempt({
@@ -218,11 +233,15 @@ class CyberPersona(Agent):
     def incident_response_step(self):
 
         if not self.security["compromised"]:
+
             return
+        
+        #I am removing probabilities for all as they are already included in the ir_attempt function
 
         # ---------------- Identification ----------------
 
-        if not self.security["discovered"]:
+        if self.security["discovered"]: #I CHANGED THIS TEMP
+
 
             probability = self.ir_probability({
                 "detection_skill": 0.6,
@@ -230,14 +249,15 @@ class CyberPersona(Agent):
                 "response_speed": 0.1
             })
 
-            if self.random.random() < probability:
-                self.identify_incident()
+
+            #if self.random.random() < probability:
+            self.identify_incident()
 
             return
 
         # ---------------- Containment ----------------
 
-        if self.ir_state == "identification":
+        if self.ir_state == "detected":
 
             probability = self.ir_probability({
                 "containment": 0.6,
@@ -245,50 +265,50 @@ class CyberPersona(Agent):
                 "response_speed": 0.2
             })
 
-            if self.random.random() < probability:
-                self.contain_incident()
+            #if self.random.random() < probability:
+            self.contain_incident()
 
             return
 
         # ---------------- Eradication ----------------
 
-        if self.ir_state == "containment":
+        if self.ir_state == "contained":
 
             probability = self.ir_probability({
                 "security_knowledge": 0.7,
                 "containment": 0.3
             })
 
-            if self.random.random() < probability:
-                self.eradicate_incident()
+            #if self.random.random() < probability:
+            self.eradicate_incident()
 
             return
 
         # ---------------- Recovery ----------------
 
-        if self.ir_state == "eradication":
+        if self.ir_state == "eradicated":
 
             probability = self.ir_probability({
                 "recovery": 0.7,
                 "response_speed": 0.3
             })
 
-            if self.random.random() < probability:
-                self.recover_system()
+            #if self.random.random() < probability:
+            self.recover_system()
 
             return
 
         # ---------------- Learning ----------------
 
-        if self.ir_state == "recovery":
+        if self.ir_state == "recovered":
 
             probability = self.ir_probability({
                 "security_knowledge": 0.8,
                 "recovery": 0.2
             })
 
-            if self.random.random() < probability:
-                self.learn_from_incident()
+            #if self.random.random() < probability:
+            self.learn_from_incident()
 
     def step(self):
         """

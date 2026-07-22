@@ -4,6 +4,8 @@ import random
 import json
 from pathlib import Path
 
+#from cyberspace import persona
+
 BEHAVIOR_FILE = (
     Path(__file__).parent / "attacker_behavior.json"
 )
@@ -339,7 +341,15 @@ class Attacker(Agent):
         operation = effect["operation"]
         value = effect["value"]
 
-        # attacker attribute
+        # Convert JSON string "True"/"False" into bool
+        if value == "True":
+            value = True
+        elif value == "False":
+            value = False
+
+        # ==========================================================
+        # 1. Effects on the attacker
+        # ==========================================================
         if target.startswith("attacker."):
 
             attr = target.split(".", 1)[1]
@@ -347,37 +357,83 @@ class Attacker(Agent):
             if not hasattr(self, attr):
                 setattr(self, attr, [])
 
-            current = getattr(self, attr)
+            before = getattr(self, attr)
 
             if operation == "set":
                 setattr(self, attr, value)
 
             elif operation == "append":
-                current.append(value)
+                before = list(before) if before is not None else []
+                getattr(self, attr).append(value)
+
+            after = getattr(self, attr)
+
+            # print(f"[ATTACKER] {attr}")
+            # print(f"    Before : {before}")
+            # print(f"    After  : {after}")
 
             return
 
-        # persona attribute
+        # ==========================================================
+        # 2. Effects on the victim's SECURITY dictionary
+        # ==========================================================
+        if target in persona.security:
 
-        if not hasattr(persona, target):
+            before = persona.security[target]
 
-            setattr(persona, target, None)
+            if operation == "set":
+                persona.security[target] = value
+
+            elif operation == "append":
+
+                current = persona.security[target]
+
+                if current is None:
+                    current = []
+                    persona.security[target] = current
+                else:
+                    before = list(current)
+
+                current.append(value)
+
+            after = persona.security[target]
+
+            # print(f"[PERSONA] {persona.unique_id} ({persona.__class__.__name__})")
+            # print(f"    Security : {target}")
+            # print(f"    Operation: {operation}")
+            # print(f"    Before   : {before}")
+            # print(f"    After    : {after}")
+
+            return
+
+        # ==========================================================
+        # 3. Effects on normal persona attributes
+        # ==========================================================
+        before = getattr(persona, target, None)
 
         if operation == "set":
-
             setattr(persona, target, value)
 
         elif operation == "append":
 
-            current = getattr(persona, target)
+            current = before
 
             if current is None:
-
                 current = []
+            else:
+                before = list(current)
 
             current.append(value)
-
             setattr(persona, target, current)
+
+        after = getattr(persona, target)
+
+        # print(f"[PERSONA] {persona.unique_id} ({persona.__class__.__name__})")
+        # print(f"    Attribute: {target}")
+        # print(f"    Operation: {operation}")
+        # print(f"    Before   : {before}")
+        # print(f"    After    : {after}")
+            
     
     def execute_stage(self, persona, stage_name):
 
@@ -394,7 +450,9 @@ class Attacker(Agent):
         for effect in effects:
 
             self._apply_effect(persona, effect)
-    
+        
+        
+
     def execute_attack(self, persona):
 
         if self.current_campaign is None:
@@ -425,6 +483,8 @@ class Attacker(Agent):
 
         self.successful_attacks += 1
 
+        persona.security["compromised"] = True
+
     def step(self):
         """
         Called once per simulation step.
@@ -433,3 +493,4 @@ class Attacker(Agent):
         target = self.choose_target()
         self.execute_attack(target)
         print(f"Attacker {self.unique_id} executed {self.current_campaign} on {target.identity['identifier'] if target else 'None'}")
+        

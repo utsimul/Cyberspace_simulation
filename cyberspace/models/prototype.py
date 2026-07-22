@@ -347,6 +347,9 @@ class CyberSimulation(Model):
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
+        for p in self.get_all_personas()[:10]:
+            print(p.unique_id, repr(p.ir_state))
+
 sim = CyberSimulation(
 
     n_social=50,
