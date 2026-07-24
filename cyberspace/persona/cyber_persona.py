@@ -129,8 +129,8 @@ class CyberPersona(Agent):
         if not self.security["compromised"]:
             return False
 
-        if self.security["discovered"]:
-            return True
+        # if self.security["discovered"]:
+        #     return True
 
         success = self.ir_attempt({
             "detection_skill": 0.6,
@@ -140,9 +140,12 @@ class CyberPersona(Agent):
 
         if success:
 
-            self.security["discovered"] = True
+            #self.security["discovered"] = True
             self.ir_state = "detected"
-            print("state changed to detected")
+            #print("state changed to detected")
+        
+        # else:
+        #     print("indentify incident success output - false")
 
         return success
     
@@ -153,7 +156,7 @@ class CyberPersona(Agent):
         if not self.security["discovered"]:
             return False
 
-        success = self.ir_attempt({
+        success = self.ir_attempt({ 
             "containment": 0.6,
             "response_speed": 0.2,
             "security_knowledge": 0.2
@@ -240,7 +243,7 @@ class CyberPersona(Agent):
 
         # ---------------- Identification ----------------
 
-        if self.security["discovered"]: #I CHANGED THIS TEMP
+        if self.security["compromised"]: #I CHANGED THIS TEMP
 
 
             probability = self.ir_probability({
@@ -258,6 +261,8 @@ class CyberPersona(Agent):
         # ---------------- Containment ----------------
 
         if self.ir_state == "detected":
+
+            print("going to call contain incident from incident step function")
 
             probability = self.ir_probability({
                 "containment": 0.6,

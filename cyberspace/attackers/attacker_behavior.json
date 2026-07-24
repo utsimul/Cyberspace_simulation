@@ -4,7 +4,7 @@
 
             "effects" : [
                 {
-                    "param" : "discovered",
+                    "param" : "compromised",
                     "operation" : "set",
                     "value" : "True"
                 }

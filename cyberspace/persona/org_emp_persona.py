@@ -1,12 +1,33 @@
 from persona.cyber_persona import CyberPersona
 from datetime import datetime
 import random
+import math
 
 
 class EmployeePersona(CyberPersona):
     """
     Organizational employee cyber persona.
     """
+
+    ACTION_WEIGHTS = {
+        "login": {
+            "openness": 0.2,
+            "conscientiousness": 0.7,
+            "extraversion": 0.1,
+            "agreeableness": 0.1,
+            "neuroticism": -0.4,
+            "bias": 0.1
+        },
+
+        "logout": {
+            "openness": 0.0,
+            "conscientiousness": -0.4,
+            "extraversion": 0.0,
+            "agreeableness": 0.0,
+            "neuroticism": 0.5,
+            "bias": 0.0
+        }
+    }
 
     def __init__(self, model,employee_id, personality=None, IR_capability = None):
         super().__init__(model,employee_id, "employee")
@@ -69,6 +90,37 @@ class EmployeePersona(CyberPersona):
 
         self.log_activity("logout")
 
+    def action_score(self, action):
+        """
+        Compute the weighted score of an action using OCEAN traits.
+        """
+
+        traits = self.behavioral["personality"]
+        weights = self.ACTION_WEIGHTS[action]
+
+        score = weights["bias"]
+
+        for trait, value in traits.items():
+            score += weights.get(trait, 0.0) * value
+
+        return score
+    
+    def choose_action(self):
+        actions = ["login", "logout"]
+
+        scores = [self.action_score(a) for a in actions]
+
+        exp_scores = [math.exp(s) for s in scores]
+        total = sum(exp_scores)
+
+        probabilities = [e / total for e in exp_scores]
+
+        return random.choices(
+            actions,
+            weights=probabilities,
+            k=1
+        )[0]
+
     def step(self):
         """
         One simulation step.
@@ -78,7 +130,7 @@ class EmployeePersona(CyberPersona):
 
         self.incident_response_step()
 
-        action = random.choice(["login", "logout"])
+        action = self.choose_action()
 
         if action == "login":
             self.login()
